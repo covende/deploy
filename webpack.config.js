@@ -175,8 +175,8 @@ module.exports = (env, args) => {
   }
   if (mode == 'production') {
     // config.plugins.push(new webpack.optimize.OccurrenceOrderPlugin());
-    config.mode = 'production';
-    configServer.mode = 'production';
+    // config.mode = 'production';
+    // configServer.mode = 'production';
   }
 
   // return config;
