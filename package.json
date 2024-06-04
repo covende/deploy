@@ -11,7 +11,7 @@
     "watch": "webpack --watch --progress --mode=development",
     "dev:build": "webpack -d --mode=development",
     "prod": "webpack --mode=production --open",
-    "build": "webpack --mode=production && node build/server.bundle.js",
+    "build": "webpack --mode=production && node ./build/server.bundle.js",
     "start": "node build/server.bundle.js",
     "test": "jest",
     "test:watch": "npm test --watch",
