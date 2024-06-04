@@ -1,0 +1,15 @@
+.vscode/
+.idea/
+bin/*
+build/*
+node_modules/
+.github/
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+
+#.env.development
+#.env.production
+#6LcgBacbAAAAAKw6O5tvCJDob6l9Q4W_jnfh0GHX

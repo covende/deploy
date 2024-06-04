@@ -1,0 +1,22 @@
+/*
+.row-whole-sale {
+  opacity: 0.21;
+}
+*/
+.action-icons-whole-sale {
+  fill: #c4c4c4;
+}
+
+.button_hmtml {
+  background-color: #00adf6;
+  color: white;
+  padding: 1px;
+  margin: 0px 2px;
+  width: 100px;
+  font-weight: 700;
+  border-radius: 20px;
+}
+
+.space-input {
+  margin: 0 10%;
+}

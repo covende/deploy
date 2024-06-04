@@ -1,0 +1,23 @@
+{
+  "plugins": ["plugins/markdown"],
+  "source": {
+    "include": ["src", "package.json", "README.md"],
+    "includePattern": ".js$",
+    "excludePattern": "(node_modules|docs|docsv2)"
+  },
+  "templates": {
+    "cleverLinks": false,
+    "monospaceLinks": false
+  },
+  "opts": {
+    "recurse": true,
+    "destination": "./docsv2",
+    "encoding": "utf8",
+    "readme": "./README.md",
+    "verbose": true,
+    "template": "./node_modules/clean-jsdoc-theme",
+    "theme_opts": {
+      "theme": "dark"
+    }
+  }
+}

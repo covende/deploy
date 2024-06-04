@@ -1,0 +1,11 @@
+User-agent: *
+Disallow:
+Sitemap: https://www.covende.com/sitemap.xml
+
+User-agent: Googlebot
+Disallow:
+
+User-agent: Googlebot-image
+Disallow:
+
+

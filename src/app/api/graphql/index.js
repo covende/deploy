@@ -1,0 +1,11 @@
+export { default as bannerService } from './banners';
+export { default as categoryService } from './categories';
+export { default as couponService } from './coupons';
+export { default as customerService } from './customers';
+export { default as orderService } from './orders';
+export { default as permissionService } from './permissions';
+export { default as planService } from './plans';
+export { default as platformService } from './platform';
+export { default as roleService } from './roles';
+export { default as userService } from './users';
+export { default as wishListService } from './wishlist';

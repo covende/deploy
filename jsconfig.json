@@ -1,0 +1,30 @@
+{
+  "compilerOptions": {
+    "target": "es2017",
+    "allowSyntheticDefaultImports": false,
+    "forceConsistentCasingInFileNames": false,
+    "rootDir": "./src",
+    "baseUrl": "./src",
+    "paths": {
+      "@CVTemplate/core/*": ["common/CovendeTemplate/*"],
+      "@CVApi/core/*": ["app/api/graphql/*"],
+      "@CVPages/core/*": ["app/main/*"],
+      "@material-ui/core/*": ["./node_modules/@material-ui/core/*"],
+      "@chakra-ui/react/*": ["./node_modules/@chakra-ui/react/src/*"],
+      "@/*": ["*"]
+    }
+  },
+  "include": ["src/**/*.d.ts", "src/**/*.js", "src/**/*.svelte"],
+  "exclude": [
+    ".git",
+    ".app-cache",
+    ".npm",
+    ".npm-tmp",
+    "build",
+    "build*",
+    "node_modules",
+    "build",
+    "**/build/*",
+    "**/node_modules/*"
+  ]
+}

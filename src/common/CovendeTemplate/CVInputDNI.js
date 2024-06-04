@@ -1,0 +1,158 @@
+import {
+  valid_dni_by_company,
+  valid_dni_unique
+} from '@/app/api/graphql/webpublic/createstore/CreateStoreService';
+import { useToast } from '@chakra-ui/toast';
+import React, { useState } from 'react';
+import { CVInput } from '.';
+import SizeBox from '../components/CustomComponent/SizeBox';
+import { isIDNumber, onlyNumber } from './CVValidation';
+import { find_person_by_dni } from '@/app/api/graphql/webpublic/createstore/CreateStoreService';
+import { CVAlertError, CVAlertSuccess } from './CVAlert';
+import { Spinner } from '@chakra-ui/react';
+import { GiTreasureMap } from 'react-icons/gi';
+
+/**
+ *
+ * @param {Object} param0
+ * @param {Function} param0.valid_dni
+ * @param {Function} param0.setperson
+ * @param {Number} param0.caracteres
+ * @param {Object} param0.person
+ * @param {String} param0.person.dni
+ * @param {String} param0.person.nombres
+ * @param {String} param0.person.apellidoPaterno
+ * @param {String} param0.person.apellidoMaterno
+ * @param {any} param0.person.any
+ * @param {Boolean} param0.unique
+ * @param {String} param0.buttonColor
+ * @param {Boolean} param0.edit
+ * @param {Boolean} param0.disabled
+ * @returns
+ */
+function CVInputDNI({
+  setTipodoc,
+  buttonColor,
+  caracteres = 8,
+  valid_dni = (value) => {},
+  person,
+  edit = false,
+  disabled = false,
+  setperson = () => {},
+  iconFind = true,
+  error = false,
+  unique = GiTreasureMap,
+  errorClass = 'errores',
+  limit_dni = false
+}) {
+  const [finding, setfinding] = useState(false);
+  const addToast = useToast();
+
+  const finddni = async () => {
+    setfinding(true);
+    const result = await find_person_by_dni(person.dni);
+    if (result && result?.status == 'ok') {
+      edit
+        ? setperson({
+            ...person,
+            first_name: result.data.nombres,
+            last_name:
+              result.data.apellidoPaterno +
+              (result.data.apellidoPaterno != '' &&
+              result.data.apellidoMaterno != ''
+                ? ' '
+                : '') +
+              result.data.apellidoMaterno
+          })
+        : setperson({
+            ...person,
+            nombres: String(result.data?.nombres || ' ').replaceAll(/-/g, ' '),
+            apellidoPaterno: String(
+              result.data?.apellidoPaterno || ' '
+            ).replaceAll(/-/g, ' '),
+            apellidoMaterno: String(
+              result.data?.apellidoMaterno || ' '
+            ).replaceAll(/-/g, ' '),
+            dni: String(result.data?.dni || ' ')
+            // ...result.data
+          });
+
+      CVAlertSuccess({ addToast, message: 'DNI Encontrado' });
+    } else {
+      setperson({
+        ...person,
+        nombres: '',
+        apellidoPaterno: '',
+        apellidoMaterno: ''
+      });
+      setTipodoc && setTipodoc(0);
+      CVAlertError({
+        addToast,
+        message:
+          'DNI no encontrado en nuestra base de datos, ingrese sus nombres y apellidos'
+      });
+    }
+    setfinding(false);
+  };
+
+  const onValidate = async (value) => {
+    if (value.length == 8 && person.dni != value) {
+      let message;
+      let valid = true;
+      if (unique) {
+        if (limit_dni) {
+          let resp = await valid_dni_by_company(value);
+          if (!resp || !resp?.status) {
+            message = resp.message || 'DNI ya se encuentra registrado.';
+            valid = false;
+          }
+        } else {
+          valid = await valid_dni_unique(value);
+        }
+      }
+
+      // const valid = unique ? await valid_dni_unique(value) : true;
+      !valid &&
+        CVAlertError({
+          addToast,
+          message: edit
+            ? 'DNI ya se encuentra registrado en covende, Actuliza la página para restablecer los nombres y apellidos'
+            : message || 'DNI ya se encuentra registrado'
+        });
+      value = valid ? value : '';
+    }
+    valid_dni(value);
+  };
+
+  return (
+    <CVInput
+      placeholder='71234567'
+      disabled={disabled}
+      value={person.dni}
+      onValid={(value) => onlyNumber(value || '')}
+      onValidate={(value) => onValidate(value)}
+      maxLength={caracteres}
+      buttonColor={buttonColor ? 'red' : 'skyblue'}
+      error={
+        error &&
+        !isIDNumber({
+          caracters: caracteres,
+          idcard: person.dni
+        })
+      }
+      errorMessage={`Pulse el botón (${caracteres} caracteres númericos)`}
+      errorClass={errorClass}
+      icon={
+        <>
+          Validar
+          <SizeBox />
+          {finding ? <Spinner /> : ''}
+        </>
+      }
+      iconFind={iconFind}
+      buttonClick={() => finddni()}
+    />
+  );
+}
+
+export default CVInputDNI;
